@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="app_spacing">12dp</dimen>
+    <dimen name="app_margin">4dp</dimen>
+    <dimen name="text_font_size">20sp</dimen>
+    <dimen name="edit_text_width">50dp</dimen>
+    <dimen name="color_box_height">100dp</dimen>
+    <dimen name="guideline_position_top">0.25</dimen>
+    <dimen name="guideline_position_bottom">0.55</dimen>
+</resources>

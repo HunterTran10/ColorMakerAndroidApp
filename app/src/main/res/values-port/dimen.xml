@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="app_spacing">16dp</dimen>
+    <dimen name="app_margin">8dp</dimen>
+    <dimen name="text_font_size">24sp</dimen>
+    <dimen name="edit_text_width">60dp</dimen>
+    <dimen name="color_box_height">340dp</dimen>
+</resources>
