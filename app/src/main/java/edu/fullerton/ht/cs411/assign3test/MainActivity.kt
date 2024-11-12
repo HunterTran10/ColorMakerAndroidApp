@@ -10,10 +10,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.Switch
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.math.roundToInt
 
-const val LOG_TAG = "Assignment3"
+const val LOG_TAG = "Assignment4"
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,8 +38,15 @@ class MainActivity : AppCompatActivity() {
     private var greenSavedValue = 0f
     private var blueSavedValue = 0f
 
+    private val colorMakerViewModel: ColorMakerViewModel by viewModels()
+    private val colorMakerPreferencesRepository: ColorMakerPreferencesRepository by lazy {
+        ColorMakerPreferencesRepository(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Log.i(LOG_TAG, "onCreate called")
 
         setContentView(R.layout.activity_main)
         colorBox = findViewById(R.id.colorBox)
@@ -80,6 +88,26 @@ class MainActivity : AppCompatActivity() {
         greenSeekBar.max = 255
         blueSeekBar.max = 255
 
+        // view model observers to update when values are changed
+        colorMakerViewModel.red.observe(this) { value ->
+            Log.i(LOG_TAG, "Updating red value to $value")
+            redSeekBar.progress = (value * 255).roundToInt()
+            redEditText.setText(String.format("%.3f", value))
+            updateColorBox("red", value)
+        }
+        colorMakerViewModel.green.observe(this) { value ->
+            Log.i(LOG_TAG, "Updating green value to $value")
+            greenSeekBar.progress = (value * 255).roundToInt()
+            greenEditText.setText(String.format("%.3f", value))
+            updateColorBox("green", value)
+        }
+        colorMakerViewModel.blue.observe(this) { value ->
+            Log.i(LOG_TAG, "Updating blue value to $value")
+            blueSeekBar.progress = (value * 255).roundToInt()
+            blueEditText.setText(String.format("%.3f", value))
+            updateColorBox("blue", value)
+        }
+
         // set the listeners for switches, seekbars and editTexts
         setListeners(redSwitch, redSeekBar, redEditText, "red")
         setListeners(greenSwitch, greenSeekBar, greenEditText, "green")
@@ -91,18 +119,95 @@ class MainActivity : AppCompatActivity() {
             redValue = 0f
             greenValue = 0f
             blueValue = 0f
+            redSavedValue = 0f
+            greenSavedValue = 0f
+            blueSavedValue = 0f
+
+            // reset values in colorMakerPreferencesRepository
+            colorMakerPreferencesRepository.saveColorValues("red", redValue)
+            colorMakerPreferencesRepository.saveColorValues("green", greenValue)
+            colorMakerPreferencesRepository.saveColorValues("blue", blueValue)
             redSwitch.isChecked = false
             greenSwitch.isChecked = false
             blueSwitch.isChecked = false
-            redSeekBar.progress = 0
-            greenSeekBar.progress = 0
-            blueSeekBar.progress = 0
-            redEditText.setText("0.000")
-            greenEditText.setText("0.000")
-            blueEditText.setText("0.000")
-            Log.i(LOG_TAG, "reset button clicked and all values reset to 0.000")
+
+            // update color values in colorMakerViewModel
+            colorMakerViewModel.setColorValue("red", 0f)
+            colorMakerViewModel.setColorValue("green", 0f)
+            colorMakerViewModel.setColorValue("blue", 0f)
+            updateColorBox("red", 0f)
+            updateColorBox("green", 0f)
+            updateColorBox("blue", 0f)
+
+            // reset color values in colorMakerViewModel
+            colorMakerViewModel.resetColorValues()
             colorBox.setBackgroundColor(Color.rgb(0, 0, 0)) // color box will be black
+            Log.i(LOG_TAG, "reset button clicked and all values reset to 0.000")
         }
+
+        // restore saved values from colorMakerPreferencesRepository
+        redSwitch.isChecked = colorMakerPreferencesRepository.getSwitchState("red")
+        greenSwitch.isChecked = colorMakerPreferencesRepository.getSwitchState("green")
+        blueSwitch.isChecked = colorMakerPreferencesRepository.getSwitchState("blue")
+
+        redSeekBar.progress = colorMakerPreferencesRepository.getProgress("red")
+        greenSeekBar.progress = colorMakerPreferencesRepository.getProgress("green")
+        blueSeekBar.progress = colorMakerPreferencesRepository.getProgress("blue")
+
+        redEditText.setText(colorMakerPreferencesRepository.getTextValue("red"))
+        greenEditText.setText(colorMakerPreferencesRepository.getTextValue("green"))
+        blueEditText.setText(colorMakerPreferencesRepository.getTextValue("blue"))
+
+        // restore instance state
+        if (savedInstanceState != null) {
+            Log.i(LOG_TAG, "restoring saved instance state")
+
+            // restore seekbar progress values
+            redSeekBar.progress = savedInstanceState.getInt("RED_PROGRESS", 0)
+            greenSeekBar.progress = savedInstanceState.getInt("GREEN_PROGRESS", 0)
+            blueSeekBar.progress = savedInstanceState.getInt("BLUE_PROGRESS", 0)
+
+            // restore switch state
+            redSwitch.isChecked = savedInstanceState.getBoolean("RED_SWITCH", false)
+            greenSwitch.isChecked = savedInstanceState.getBoolean("GREEN_SWITCH", false)
+            blueSwitch.isChecked = savedInstanceState.getBoolean("BLUE_SWITCH", false)
+
+            // restore text input values
+            redEditText.setText(savedInstanceState.getString("RED_TEXT", "0.000"))
+            greenEditText.setText(savedInstanceState.getString("GREEN_TEXT", "0.000"))
+            blueEditText.setText(savedInstanceState.getString("BLUE_TEXT", "0.000"))
+
+            // restore saved color values
+            redSavedValue = savedInstanceState.getFloat("RED_SAVED_VALUE", 0f)
+            greenSavedValue = savedInstanceState.getFloat("GREEN_SAVED_VALUE", 0f)
+            blueSavedValue = savedInstanceState.getFloat("BLUE_SAVED_VALUE", 0f)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.i(LOG_TAG, "saving instance state")
+
+        // save seekbar progress values
+        outState.putInt("RED_PROGRESS", redSeekBar.progress)
+        outState.putInt("GREEN_PROGRESS", greenSeekBar.progress)
+        outState.putInt("BLUE_PROGRESS", blueSeekBar.progress)
+
+        // save switch state
+        outState.putBoolean("RED_SWITCH", redSwitch.isChecked)
+        outState.putBoolean("GREEN_SWITCH", greenSwitch.isChecked)
+        outState.putBoolean("BLUE_SWITCH", blueSwitch.isChecked)
+
+        // save text input values
+        outState.putString("RED_TEXT", redEditText.text.toString())
+        outState.putString("GREEN_TEXT", greenEditText.text.toString())
+        outState.putString("BLUE_TEXT", blueEditText.text.toString())
+
+        // save the color values when switches are off
+        outState.putFloat("RED_SAVED_VALUE", redSavedValue)
+        outState.putFloat("GREEN_SAVED_VALUE", greenSavedValue)
+        outState.putFloat("BLUE_SAVED_VALUE", blueSavedValue)
+
     }
 
     // set the listeners for each switch, seekbar and editText
@@ -113,8 +218,26 @@ class MainActivity : AppCompatActivity() {
 
             Log.i(LOG_TAG, "$color switch is now ${isChecked}")
 
+            // save switch state to colorMakerPreferencesRepository
+            colorMakerPreferencesRepository.saveSwitchState(color, isChecked)
+
+            // save the current value
+            if (!isChecked) {
+                when (color) {
+                    "red" -> colorMakerPreferencesRepository.saveColorValues("red", redValue)
+                    "green" -> colorMakerPreferencesRepository.saveColorValues("green", greenValue)
+                    "blue" -> colorMakerPreferencesRepository.saveColorValues("blue", blueValue)
+                }
+            }
+
+            // save seekbar progress
+            colorMakerPreferencesRepository.saveProgress(color, seekBar.progress)
+
+            // save editText value
+            colorMakerPreferencesRepository.saveTextValue(color, editText.text.toString())
+
             // if the switch is off, save the value and update the color box
-            if (!switch.isChecked) {
+            if (!isChecked) {
                 // disable seekbar and editText
                 seekBar.isEnabled = false
                 editText.isEnabled = false
@@ -123,30 +246,44 @@ class MainActivity : AppCompatActivity() {
                 if (color == "red") {
                     redSavedValue = redValue
                     redValue = 0f
+                    colorMakerViewModel.setColorValue("red", redValue) // update color value in the view model
+                    redSeekBar.progress = (redSavedValue * 255).roundToInt()
+                    redEditText.setText(String.format("%.3f", redSavedValue))
                 } else if (color == "green") {
                     greenSavedValue = greenValue
                     greenValue = 0f
+                    colorMakerViewModel.setColorValue("green", greenValue)
+                    greenSeekBar.progress = (greenSavedValue * 255).roundToInt()
+                    greenEditText.setText(String.format("%.3f", greenSavedValue))
                 } else if (color == "blue") {
                     blueSavedValue = blueValue
                     blueValue = 0f
+                    colorMakerViewModel.setColorValue("blue", blueValue)
+                    blueSeekBar.progress = (blueSavedValue * 255).roundToInt()
+                    blueEditText.setText(String.format("%.3f", blueSavedValue))
                 }
-                updateColorBox(color, 0f) // update the colors to 0
             } else {
                 // enable seekbar and editText
                 seekBar.isEnabled = true
                 editText.isEnabled = true
 
-                // restore color values and update the color box
+                // restore color values
                 if (color == "red") {
-                    redValue = redSavedValue
-                    updateColorBox(color, redValue)
-                } else if (color == "green") {
-                    greenValue = greenSavedValue
-                    updateColorBox(color, greenValue)
-                } else if (color == "blue") {
-                    blueValue = blueSavedValue
-                    updateColorBox(color, blueValue)
+                    // get the value from colorMakerPreferencesRepository
+                    redValue = colorMakerPreferencesRepository.getColorValues("red")
+                    // update the color value in colorMakerViewModel
+                    colorMakerViewModel.setColorValue("red", redValue)
                 }
+                else if (color == "green") {
+                    greenValue = colorMakerPreferencesRepository.getColorValues("green")
+                    colorMakerViewModel.setColorValue("green", greenValue)
+
+                }
+                else if (color == "blue") {
+                    blueValue = colorMakerPreferencesRepository.getColorValues("blue")
+                    colorMakerViewModel.setColorValue("blue", blueValue)
+                }
+
                 Log.i(LOG_TAG, "$color switch turned on and restoring value")
             }
         }
@@ -157,8 +294,15 @@ class MainActivity : AppCompatActivity() {
                 if (switch.isChecked) {
                     val value = progress / 255f // convert progress to float
                     editText.setText(String.format("%.3f", value)) // update edit text
+                    colorMakerViewModel.setColorValue(color, value)
                     updateColorBox(color, value)
                     Log.i(LOG_TAG, "$color seek bar value is $progress")
+
+                    // save the progress values in colorMakerPreferencesRepository
+                    colorMakerPreferencesRepository.saveProgress("red", seekBar.progress)
+                    colorMakerPreferencesRepository.saveProgress("green", seekBar.progress)
+                    colorMakerPreferencesRepository.saveProgress("blue ", seekBar.progress)
+
                 }
             }
 
@@ -173,14 +317,19 @@ class MainActivity : AppCompatActivity() {
                 if (userInput.isNotEmpty()) {
                     val floatValue = userInput.toFloatOrNull() // try to convert the input to a float number
                     if (floatValue != null) {
-                        val rangeValue = floatValue.coerceIn(0f, 1f)// make the float value between 0.0 and 1.0
+                        val rangeValue = floatValue.coerceIn(0f, 1f) // make the float value between 0.0 and 1.0
                         editText.setText(String.format("%.3f", rangeValue)) // update the edittext with the new value
                         val seekBarProgress = (rangeValue * 255).roundToInt()
-                        seekBar.progress = seekBarProgress
+                        seekBar.progress = (rangeValue * 255).roundToInt()
+                        colorMakerViewModel.setColorValue(color, seekBarProgress / 255f)
+                        updateColorBox(color, seekBarProgress / 255f)
 
                         Log.i(LOG_TAG, "$rangeValue was a valid input and the seek bar value is $seekBarProgress")
 
-                        updateColorBox(color, seekBarProgress / 255f)
+                        // save the text values in colorMakerPreferencesRepository
+                        colorMakerPreferencesRepository.saveTextValue("red", editText.text.toString())
+                        colorMakerPreferencesRepository.saveTextValue("green", editText.text.toString())
+                        colorMakerPreferencesRepository.saveTextValue("blue ", editText.text.toString())
                     }
                 }
                 true // the action was handled
@@ -190,22 +339,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // update the changes and the color box
     private fun updateColorBox(color: String, value: Float) {
-        if (color == "red") {
+        if (color == "red" && redValue != value) {
             redValue = value
-        } else if (color == "green") {
+            colorMakerViewModel.setColorValue("red", redValue)
+        } else if (color == "green" && greenValue != value) {
             greenValue = value
-        } else if (color == "blue") {
+            colorMakerViewModel.setColorValue("green", greenValue)
+        } else if (color == "blue" && blueValue != value) {
             blueValue = value
+            colorMakerViewModel.setColorValue("blue", blueValue)
         }
 
-        // convert floats to integers
-        val red = (redValue * 255).roundToInt()
-        val green = (greenValue * 255).roundToInt()
-        val blue = (blueValue * 255).roundToInt()
+        // get the value in colorMakerViewModel and convert the float to integer
+        val red = ((colorMakerViewModel.red.value ?: 0f) * 255).roundToInt()
+        val green = ((colorMakerViewModel.green.value ?: 0f) * 255).roundToInt()
+        val blue = ((colorMakerViewModel.blue.value ?: 0f) * 255).roundToInt()
         colorBox.setBackgroundColor(Color.rgb(red, green, blue)) // change color box
     }
-
 }
-

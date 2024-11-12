@@ -42,6 +42,14 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.lifecycle.extensions)
+    implementation(libs.androidx.datastore.preferences.v111)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx.v251)
+
+    implementation(libs.androidx.lifecycle.viewmodel.ktx.v260)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.datastore.preferences.v111)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
