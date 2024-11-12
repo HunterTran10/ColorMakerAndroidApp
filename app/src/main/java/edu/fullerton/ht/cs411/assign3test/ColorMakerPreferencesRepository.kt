@@ -46,6 +46,7 @@ class ColorMakerPreferencesRepository(context: Context) {
         }
     }
 
+
     private val sharedPrefs = context.getSharedPreferences("ColorMakerAppPreferences", Context.MODE_PRIVATE)
 
     // saves color values to shared preferences

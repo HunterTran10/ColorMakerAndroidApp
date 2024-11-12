@@ -54,7 +54,6 @@ class ColorMakerViewModel(application: Application) : AndroidViewModel(applicati
     // saves the color values to the repository
     private fun saveColorValues() {
         viewModelScope.launch {
-            // save the current values in DataStore
             colorMakerPreferencesRepository.saveColorValue("red", _red.value ?: 0f)
             colorMakerPreferencesRepository.saveColorValue("green", _green.value ?: 0f)
             colorMakerPreferencesRepository.saveColorValue("blue", _blue.value ?: 0f)
