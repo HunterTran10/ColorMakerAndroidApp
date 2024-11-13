@@ -1,6 +1,6 @@
 # Assignment 3: Color Maker 
 
-My submission for CPSC 411a, Section 01, Assignment 3: Color Maker
+My submission for CPSC 411a, Section 01, Assignment 4: Persistence
 
 # My Information
 
