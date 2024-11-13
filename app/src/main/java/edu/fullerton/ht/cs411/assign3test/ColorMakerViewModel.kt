@@ -26,7 +26,7 @@ class ColorMakerViewModel(application: Application) : AndroidViewModel(applicati
 
     // runs when the viewmodel starts
     init {
-        loadColorValues()
+        loadValue()
     }
 
     // sets the color value
@@ -38,33 +38,33 @@ class ColorMakerViewModel(application: Application) : AndroidViewModel(applicati
         } else if (color == "blue") {
             _blue.value = value
         }
-        saveColorValues()
+        saveValue()
     }
 
     // loads the color values from the repository
-    private fun loadColorValues() {
+    private fun loadValue() {
         viewModelScope.launch {
             // collect the value from the Flow
-            _red.value = colorMakerPreferencesRepository.getColorValue("red").first()
-            _green.value = colorMakerPreferencesRepository.getColorValue("green").first()
-            _blue.value = colorMakerPreferencesRepository.getColorValue("blue").first()
+            _red.value = colorMakerPreferencesRepository.getValue("red").first()
+            _green.value = colorMakerPreferencesRepository.getValue("green").first()
+            _blue.value = colorMakerPreferencesRepository.getValue("blue").first()
         }
     }
 
     // saves the color values to the repository
-    private fun saveColorValues() {
+    private fun saveValue() {
         viewModelScope.launch {
-            colorMakerPreferencesRepository.saveColorValue("red", _red.value ?: 0f)
-            colorMakerPreferencesRepository.saveColorValue("green", _green.value ?: 0f)
-            colorMakerPreferencesRepository.saveColorValue("blue", _blue.value ?: 0f)
+            colorMakerPreferencesRepository.saveValue("red", _red.value ?: 0f)
+            colorMakerPreferencesRepository.saveValue("green", _green.value ?: 0f)
+            colorMakerPreferencesRepository.saveValue("blue", _blue.value ?: 0f)
         }
     }
 
     // resets all colors back to zero
-    fun resetColorValues() {
+    fun resetValues() {
         _red.value = 0f
         _green.value = 0f
         _blue.value = 0f
-        saveColorValues()
+        saveValue()
     }
 }

@@ -19,7 +19,7 @@ class ColorMakerPreferencesRepository(context: Context) {
     private val blueKey = floatPreferencesKey("blue")
 
     // saves a color value to data store
-    suspend fun saveColorValue(color: String, value: Float) {
+    suspend fun saveValue(color: String, value: Float) {
         dataStore.edit { prefs ->
             if (color == "red") {
                 prefs[redKey] = value
@@ -32,7 +32,7 @@ class ColorMakerPreferencesRepository(context: Context) {
     }
 
     // gets a color value from data store
-    fun getColorValue(color: String): Flow<Float> {
+    fun getValue(color: String): Flow<Float> {
         return dataStore.data.map { prefs ->
             if (color == "red") {
                 prefs[redKey] ?: 0f
@@ -72,7 +72,7 @@ class ColorMakerPreferencesRepository(context: Context) {
     }
 
     // saves switch states for each color
-    fun saveSwitchState(color: String, isChecked: Boolean) {
+    fun saveSwitch(color: String, isChecked: Boolean) {
         with(sharedPrefs.edit()) {
             when (color) {
                 "red" -> putBoolean("RED_SWITCH", isChecked)
@@ -84,7 +84,7 @@ class ColorMakerPreferencesRepository(context: Context) {
     }
 
     // gets switch states
-    fun getSwitchState(color: String): Boolean {
+    fun getSwitch(color: String): Boolean {
         return when (color) {
             "red" -> sharedPrefs.getBoolean("RED_SWITCH", false)
             "green" -> sharedPrefs.getBoolean("GREEN_SWITCH", false)
@@ -116,7 +116,7 @@ class ColorMakerPreferencesRepository(context: Context) {
     }
 
     // saves text values
-    fun saveTextValue(color: String, value: String) {
+    fun saveText(color: String, value: String) {
         with(sharedPrefs.edit()) {
             when (color) {
                 "red" -> putString("RED_TEXT", value)
@@ -128,7 +128,7 @@ class ColorMakerPreferencesRepository(context: Context) {
     }
 
     // gets text values
-    fun getTextValue(color: String): String {
+    fun getText(color: String): String {
         return when (color) {
             "red" -> sharedPrefs.getString("RED_TEXT", "0.000") ?: "0.000"
             "green" -> sharedPrefs.getString("GREEN_TEXT", "0.000") ?: "0.000"

@@ -140,21 +140,21 @@ class MainActivity : AppCompatActivity() {
             updateColorBox("blue", 0f)
 
             // reset color values in colorMakerViewModel
-            colorMakerViewModel.resetColorValues()
+            colorMakerViewModel.resetValues()
             colorBox.setBackgroundColor(Color.rgb(0, 0, 0)) // color box will be black
             Log.i(LOG_TAG, "reset button clicked and all values reset to 0.000")
         }
 
         // restore saved values from colorMakerPreferencesRepository
-        redSwitch.isChecked = colorMakerPreferencesRepository.getSwitchState("red")
-        greenSwitch.isChecked = colorMakerPreferencesRepository.getSwitchState("green")
-        blueSwitch.isChecked = colorMakerPreferencesRepository.getSwitchState("blue")
+        redSwitch.isChecked = colorMakerPreferencesRepository.getSwitch("red")
+        greenSwitch.isChecked = colorMakerPreferencesRepository.getSwitch("green")
+        blueSwitch.isChecked = colorMakerPreferencesRepository.getSwitch("blue")
         redSeekBar.progress = colorMakerPreferencesRepository.getProgress("red")
         greenSeekBar.progress = colorMakerPreferencesRepository.getProgress("green")
         blueSeekBar.progress = colorMakerPreferencesRepository.getProgress("blue")
-        redEditText.setText(colorMakerPreferencesRepository.getTextValue("red"))
-        greenEditText.setText(colorMakerPreferencesRepository.getTextValue("green"))
-        blueEditText.setText(colorMakerPreferencesRepository.getTextValue("blue"))
+        redEditText.setText(colorMakerPreferencesRepository.getText("red"))
+        greenEditText.setText(colorMakerPreferencesRepository.getText("green"))
+        blueEditText.setText(colorMakerPreferencesRepository.getText("blue"))
 
         // restore instance state
         if (savedInstanceState != null) {
@@ -217,7 +217,7 @@ class MainActivity : AppCompatActivity() {
             Log.i(LOG_TAG, "$color switch is now ${isChecked}")
 
             // save switch state to colorMakerPreferencesRepository
-            colorMakerPreferencesRepository.saveSwitchState(color, isChecked)
+            colorMakerPreferencesRepository.saveSwitch(color, isChecked)
 
             // save the current value
             if (!isChecked) {
@@ -232,7 +232,7 @@ class MainActivity : AppCompatActivity() {
             colorMakerPreferencesRepository.saveProgress(color, seekBar.progress)
 
             // save editText value
-            colorMakerPreferencesRepository.saveTextValue(color, editText.text.toString())
+            colorMakerPreferencesRepository.saveText(color, editText.text.toString())
 
             // if the switch is off, save the value and update the color box
             if (!isChecked) {
@@ -318,9 +318,9 @@ class MainActivity : AppCompatActivity() {
                         Log.i(LOG_TAG, "$rangeValue was a valid input and the seek bar value is $seekBarProgress")
 
                         // save the text values in colorMakerPreferencesRepository
-                        colorMakerPreferencesRepository.saveTextValue("red", editText.text.toString())
-                        colorMakerPreferencesRepository.saveTextValue("green", editText.text.toString())
-                        colorMakerPreferencesRepository.saveTextValue("blue ", editText.text.toString())
+                        colorMakerPreferencesRepository.saveText("red", editText.text.toString())
+                        colorMakerPreferencesRepository.saveText("green", editText.text.toString())
+                        colorMakerPreferencesRepository.saveText("blue ", editText.text.toString())
                     }
                 }
                 true // the action was handled
