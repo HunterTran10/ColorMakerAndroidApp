@@ -127,6 +127,7 @@ class MainActivity : AppCompatActivity() {
             colorMakerPreferencesRepository.saveColorValues("red", redValue)
             colorMakerPreferencesRepository.saveColorValues("green", greenValue)
             colorMakerPreferencesRepository.saveColorValues("blue", blueValue)
+
             redSwitch.isChecked = false
             greenSwitch.isChecked = false
             blueSwitch.isChecked = false
@@ -135,12 +136,15 @@ class MainActivity : AppCompatActivity() {
             colorMakerViewModel.setColorValue("red", 0f)
             colorMakerViewModel.setColorValue("green", 0f)
             colorMakerViewModel.setColorValue("blue", 0f)
+
+            // change the colorbox
             updateColorBox("red", 0f)
             updateColorBox("green", 0f)
             updateColorBox("blue", 0f)
 
             // reset color values in colorMakerViewModel
             colorMakerViewModel.resetValues()
+
             colorBox.setBackgroundColor(Color.rgb(0, 0, 0)) // color box will be black
             Log.i(LOG_TAG, "reset button clicked and all values reset to 0.000")
         }
@@ -330,6 +334,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // update the changes and the color box
     private fun updateColorBox(color: String, value: Float) {
         if (color == "red" && redValue != value) {
             redValue = value
