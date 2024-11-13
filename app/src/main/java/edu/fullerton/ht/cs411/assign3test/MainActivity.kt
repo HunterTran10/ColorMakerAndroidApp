@@ -269,7 +269,6 @@ class MainActivity : AppCompatActivity() {
                 else if (color == "green") {
                     greenValue = colorMakerPreferencesRepository.getColorValues("green")
                     colorMakerViewModel.setColorValue("green", greenValue)
-
                 }
                 else if (color == "blue") {
                     blueValue = colorMakerPreferencesRepository.getColorValues("blue")
