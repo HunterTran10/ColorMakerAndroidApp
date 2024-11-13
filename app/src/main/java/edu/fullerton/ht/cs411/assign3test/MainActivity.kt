@@ -245,20 +245,14 @@ class MainActivity : AppCompatActivity() {
                     redSavedValue = redValue
                     redValue = 0f
                     colorMakerViewModel.setColorValue("red", redValue) // update color value in the view model
-                    redSeekBar.progress = (redSavedValue * 255).roundToInt()
-                    redEditText.setText(String.format("%.3f", redSavedValue))
                 } else if (color == "green") {
                     greenSavedValue = greenValue
                     greenValue = 0f
                     colorMakerViewModel.setColorValue("green", greenValue)
-                    greenSeekBar.progress = (greenSavedValue * 255).roundToInt()
-                    greenEditText.setText(String.format("%.3f", greenSavedValue))
                 } else if (color == "blue") {
                     blueSavedValue = blueValue
                     blueValue = 0f
                     colorMakerViewModel.setColorValue("blue", blueValue)
-                    blueSeekBar.progress = (blueSavedValue * 255).roundToInt()
-                    blueEditText.setText(String.format("%.3f", blueSavedValue))
                 }
             } else {
                 // enable seekbar and editText
