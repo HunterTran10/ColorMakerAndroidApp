@@ -149,11 +149,9 @@ class MainActivity : AppCompatActivity() {
         redSwitch.isChecked = colorMakerPreferencesRepository.getSwitchState("red")
         greenSwitch.isChecked = colorMakerPreferencesRepository.getSwitchState("green")
         blueSwitch.isChecked = colorMakerPreferencesRepository.getSwitchState("blue")
-
         redSeekBar.progress = colorMakerPreferencesRepository.getProgress("red")
         greenSeekBar.progress = colorMakerPreferencesRepository.getProgress("green")
         blueSeekBar.progress = colorMakerPreferencesRepository.getProgress("blue")
-
         redEditText.setText(colorMakerPreferencesRepository.getTextValue("red"))
         greenEditText.setText(colorMakerPreferencesRepository.getTextValue("green"))
         blueEditText.setText(colorMakerPreferencesRepository.getTextValue("blue"))
