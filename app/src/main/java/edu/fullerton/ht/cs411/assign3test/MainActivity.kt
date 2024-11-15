@@ -225,10 +225,12 @@ class MainActivity : AppCompatActivity() {
 
             // save the current value
             if (!isChecked) {
-                when (color) {
-                    "red" -> colorMakerPreferencesRepository.saveColorValues("red", redValue)
-                    "green" -> colorMakerPreferencesRepository.saveColorValues("green", greenValue)
-                    "blue" -> colorMakerPreferencesRepository.saveColorValues("blue", blueValue)
+                if (color == "red") {
+                    colorMakerPreferencesRepository.saveColorValues("red", redValue)
+                } else if (color == "green") {
+                    colorMakerPreferencesRepository.saveColorValues("green", greenValue)
+                } else if (color == "blue") {
+                    colorMakerPreferencesRepository.saveColorValues("blue", blueValue)
                 }
             }
 
