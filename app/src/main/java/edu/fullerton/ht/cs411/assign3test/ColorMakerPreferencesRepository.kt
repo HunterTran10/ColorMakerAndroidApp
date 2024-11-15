@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 // sets up data store for saving color
-val Context.dataStore by preferencesDataStore(name = "color_prefs")
+val Context.dataStore by preferencesDataStore(name = "color_settings")
 
 class ColorMakerPreferencesRepository(context: Context) {
 
