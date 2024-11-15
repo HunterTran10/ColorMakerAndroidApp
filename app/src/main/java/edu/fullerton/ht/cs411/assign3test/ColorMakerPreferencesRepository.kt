@@ -46,16 +46,17 @@ class ColorMakerPreferencesRepository(context: Context) {
         }
     }
 
-
     private val sharedPrefs = context.getSharedPreferences("ColorMakerAppPreferences", Context.MODE_PRIVATE)
 
     // saves color values to shared preferences
     fun saveColorValues(color: String, value: Float) {
         with(sharedPrefs.edit()) {
-            when (color) {
-                "red" -> putFloat("RED_VALUE", value)
-                "green" -> putFloat("GREEN_VALUE", value)
-                "blue" -> putFloat("BLUE_VALUE", value)
+            if (color == "red") {
+                putFloat("RED_VALUE", value)
+            } else if (color == "green") {
+                putFloat("GREEN_VALUE", value)
+            } else if (color == "blue") {
+                putFloat("BLUE_VALUE", value)
             }
             apply()
         }
@@ -63,21 +64,26 @@ class ColorMakerPreferencesRepository(context: Context) {
 
     // gets color values from shared preferences
     fun getColorValues(color: String): Float {
-        return when (color) {
-            "red" -> sharedPrefs.getFloat("RED_VALUE", 0f)
-            "green" -> sharedPrefs.getFloat("GREEN_VALUE", 0f)
-            "blue" -> sharedPrefs.getFloat("BLUE_VALUE", 0f)
-            else -> 0f
+        if (color == "red") {
+            return sharedPrefs.getFloat("RED_VALUE", 0f)
+        } else if (color == "green") {
+            return sharedPrefs.getFloat("GREEN_VALUE", 0f)
+        } else if (color == "blue") {
+            return sharedPrefs.getFloat("BLUE_VALUE", 0f)
+        } else {
+            return 0f
         }
     }
 
     // saves switch states for each color
     fun saveSwitch(color: String, isChecked: Boolean) {
         with(sharedPrefs.edit()) {
-            when (color) {
-                "red" -> putBoolean("RED_SWITCH", isChecked)
-                "green" -> putBoolean("GREEN_SWITCH", isChecked)
-                "blue" -> putBoolean("BLUE_SWITCH", isChecked)
+            if (color == "red") {
+                putBoolean("RED_SWITCH", isChecked)
+            } else if (color == "green") {
+                putBoolean("GREEN_SWITCH", isChecked)
+            } else if (color == "blue") {
+                putBoolean("BLUE_SWITCH", isChecked)
             }
             apply()
         }
@@ -85,21 +91,26 @@ class ColorMakerPreferencesRepository(context: Context) {
 
     // gets switch states
     fun getSwitch(color: String): Boolean {
-        return when (color) {
-            "red" -> sharedPrefs.getBoolean("RED_SWITCH", false)
-            "green" -> sharedPrefs.getBoolean("GREEN_SWITCH", false)
-            "blue" -> sharedPrefs.getBoolean("BLUE_SWITCH", false)
-            else -> false
+        if (color == "red") {
+            return sharedPrefs.getBoolean("RED_SWITCH", false)
+        } else if (color == "green") {
+            return sharedPrefs.getBoolean("GREEN_SWITCH", false)
+        } else if (color == "blue") {
+            return sharedPrefs.getBoolean("BLUE_SWITCH", false)
+        } else {
+            return false
         }
     }
 
     // saves progress values
     fun saveProgress(color: String, progress: Int) {
         with(sharedPrefs.edit()) {
-            when (color) {
-                "red" -> putInt("RED_PROGRESS", progress)
-                "green" -> putInt("GREEN_PROGRESS", progress)
-                "blue" -> putInt("BLUE_PROGRESS", progress)
+            if (color == "red") {
+                putInt("RED_PROGRESS", progress)
+            } else if (color == "green") {
+                putInt("GREEN_PROGRESS", progress)
+            } else if (color == "blue") {
+                putInt("BLUE_PROGRESS", progress)
             }
             apply()
         }
@@ -107,21 +118,26 @@ class ColorMakerPreferencesRepository(context: Context) {
 
     // gets progress values
     fun getProgress(color: String): Int {
-        return when (color) {
-            "red" -> sharedPrefs.getInt("RED_PROGRESS", 0)
-            "green" -> sharedPrefs.getInt("GREEN_PROGRESS", 0)
-            "blue" -> sharedPrefs.getInt("BLUE_PROGRESS", 0)
-            else -> 0
+        if (color == "red") {
+            return sharedPrefs.getInt("RED_PROGRESS", 0)
+        } else if (color == "green") {
+            return sharedPrefs.getInt("GREEN_PROGRESS", 0)
+        } else if (color == "blue") {
+            return sharedPrefs.getInt("BLUE_PROGRESS", 0)
+        } else {
+            return 0
         }
     }
 
     // saves text values
     fun saveText(color: String, value: String) {
         with(sharedPrefs.edit()) {
-            when (color) {
-                "red" -> putString("RED_TEXT", value)
-                "green" -> putString("GREEN_TEXT", value)
-                "blue" -> putString("BLUE_TEXT", value)
+            if (color == "red") {
+                putString("RED_TEXT", value)
+            } else if (color == "green") {
+                putString("GREEN_TEXT", value)
+            } else if (color == "blue") {
+                putString("BLUE_TEXT", value)
             }
             apply()
         }
@@ -129,11 +145,14 @@ class ColorMakerPreferencesRepository(context: Context) {
 
     // gets text values
     fun getText(color: String): String {
-        return when (color) {
-            "red" -> sharedPrefs.getString("RED_TEXT", "0.000") ?: "0.000"
-            "green" -> sharedPrefs.getString("GREEN_TEXT", "0.000") ?: "0.000"
-            "blue" -> sharedPrefs.getString("BLUE_TEXT", "0.000") ?: "0.000"
-            else -> "0.000"
+        if (color == "red") {
+            return sharedPrefs.getString("RED_TEXT", "0.000") ?: "0.000"
+        } else if (color == "green") {
+            return sharedPrefs.getString("GREEN_TEXT", "0.000") ?: "0.000"
+        } else if (color == "blue") {
+            return sharedPrefs.getString("BLUE_TEXT", "0.000") ?: "0.000"
+        } else {
+            return "0.000"
         }
     }
 }
