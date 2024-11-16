@@ -1,4 +1,4 @@
-# Assignment 3: Color Maker 
+# Assignment 4: Persistence 
 
 My submission for CPSC 411a, Section 01, Assignment 4: Persistence
 
